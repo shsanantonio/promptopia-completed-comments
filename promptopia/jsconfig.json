@@ -1,3 +1,4 @@
+/*  Lets us specify a base directory for a project/ absoulte path*/
 {
   "compilerOptions": {
     "paths": {

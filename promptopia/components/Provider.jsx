@@ -1,9 +1,11 @@
-import React from 'react'
+'use client'; // Since we are using Browser's capabilities
 
-const Provider = () => {
-  return (
-    <div>Provider</div>
-  )
-}
+import { SessionProvider } from "next-auth/react";
 
-export default Provider
+const Provider = ({ children, session }) => ( //get current children of <Provider> in Layout.jsx, and data session through <Nav>
+  <SessionProvider session={session}>
+    {children}
+  </SessionProvider>
+)
+
+export default Provider;
