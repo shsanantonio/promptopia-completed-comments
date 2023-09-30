@@ -14,11 +14,12 @@ const CreatePrompt = () => {
   const [post, setPost] = useState({ prompt: "", tag: "" });
 
   const createPrompt = async (e) => { 
-    e.preventDefault(); //prevents the link from redirecting to a URL
-    setIsSubmitting(true);
+    e.preventDefault(); //prevents the page from reloading and redirecting to url
+    setIsSubmitting(true); //loader
 
     try {
-      const response = await fetch("/api/prompt/new", {  //
+      console.log(`session: ${session}`)
+      const response = await fetch("/api/prompt/new", {  // calls api, passing data to api endpoint using POST request
         method: "POST",
         body: JSON.stringify({
           prompt: post.prompt,
@@ -28,11 +29,11 @@ const CreatePrompt = () => {
       });
 
       if (response.ok) {
-        router.push("/");
+        router.push("/"); // goes to homepage if post is successfully created
       }
     } catch (error) {
       console.log(error);
-    } finally {
+    } finally { // hapens whether post is successfully created or not
       setIsSubmitting(false);
     }
   };
@@ -43,7 +44,7 @@ const CreatePrompt = () => {
       post={post} //{ prompt: "", tag: "" }
       setPost={setPost}
       submitting={submitting} //false
-      handleSubmit={createPrompt}  //passes the function to be called when the user submits forms in Form component
+      handleSubmit={createPrompt}  //passes the function to be called when the user submits forms in Form component   
     />
   );
 };
