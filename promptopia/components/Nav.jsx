@@ -7,8 +7,14 @@ import { signIn, signOut, useSession, getProviders } from "next-auth/react"; /* 
 
 /* The contents in Nav Bar will appear on top */
 const Nav = () => {
-  const isUserLoggedIn = true;
-  // const { data: session } = useSession();
+
+  /*
+   * This can be three values: Session / undefined / null.
+    when the session hasn't been fetched yet, data will be undefined
+    in case it failed to retrieve the session, data will be null
+    in case of success, data will be Session.
+   */
+  const { data: session } = useSession();
   const [providers, setProviders] = useState(null); //provider list
   const [toggleDropdown, setToggleDropdown] = useState(false); // for mobile device only, profile bar
 
@@ -43,9 +49,10 @@ const Nav = () => {
       {/* Desktop Navigation */}
       <div className='sm:flex hidden'>{/* On small devices it's visible, but on bigger devices it's hidden */}
         {/* Needs to know if the user is logged in or not so we need to find out which buttons to show  */}
-        {isUserLoggedIn ? ( /* If the user is logged in, user can create post, signout button and user's profile info will be shown */
+        {session?.user ? ( /* If the user is logged in, user can create post, signout button and user's profile info will be shown */
           <div className='flex gap-3 md:gap-5'>
-            <Link href='/create-prompt' className='black_btn'>
+
+            <Link href='/create-prompt' className='black_btn'> 
               Create Post
             </Link>
 
@@ -55,7 +62,7 @@ const Nav = () => {
 
             <Link href='/profile'>
               <Image
-                src='/assets/images/logo.svg'
+                src={session?.user.image}
                 width={37}
                 height={37}
                 className='rounded-full'
@@ -85,10 +92,10 @@ const Nav = () => {
 
       {/* Mobile Navigation */}
       <div className='sm:hidden flex relative'> {/* On small devices it's gonna be hidden, but on bigger devices it's gonna be visible   */}
-        {isUserLoggedIn ? (/* If the user is logged in, user can create post, signout button and user's profile info will be shown */
+        {session?.user ? (/* If the user is logged in, user can create post, signout button and user's profile info will be shown */
           <div className='flex'>
             <Image
-              src='/assets/images/logo.svg'
+              src={session?.user.image}
               width={37}
               height={37}
               className='rounded-full'

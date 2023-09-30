@@ -1,5 +1,5 @@
 /**
- * Setting up Google Auth: https://next-auth.js.org/providers/google
+ * Setting up Google Auth: https://next-auth.js.org
  * Everu nextjs route is a serverless route
  */
 import NextAuth from 'next-auth';
@@ -15,13 +15,13 @@ const handler = NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET, ////will be provided from project created from google cloud and will be included in .env
     })
   ],
-  callbacks: {
+  callbacks: { //necessary, must be an object containing the async functions
     async session({ session }) { // to get the session, user needs to signin
       // store the user id from MongoDB to session
-      const sessionUser = await User.findOne({ email: session.user.email });
+      const sessionUser = await User.findOne({ email: session.user.email }); //find email by session 
       session.user.id = sessionUser._id.toString();
 
-      return session;
+      return session; // makes sure which user is currently online  
     },
     async signIn({ account, profile, user, credentials }) {
         /* lambda function that only opens up when called, every time its called it spins up the server and make a connection to the database
@@ -31,13 +31,13 @@ const handler = NextAuth({
         await connectToDB();
 
         // checks if user already exists
-        const userExists = await User.findOne({ email: profile.email });
+        const userExists = await User.findOne({ email: profile.email }); //find by email
 
-        // if not, create a new document and save user in MongoDB
+        // if not, create a new user and save in MongoDB
         if (!userExists) {
           await User.create({ //saves to database
             email: profile.email,
-            username: profile.name.replace(" ", "").toLowerCase(),
+            username: profile.name.replace(" ", "").toLowerCase(), // always replace a space with no space
             image: profile.picture,
           });
         }

@@ -21,7 +21,7 @@ export const metadata = {
   const RootLayout = ({ children }) => (
     <html lang='en'>
       <body>
-     { /* <Provider> SessionProvider component must always wrap the app */} 
+        <Provider> {/* SessionProvider component must always wrap the app */} 
           <div className='main'> {/* changes the background */}
             <div className='gradient' />
           </div>
@@ -30,7 +30,7 @@ export const metadata = {
             <Nav />
             {children} {/* Displays metadata description + */}
           </main>
-        {/* </Provider> */}
+        </Provider>
       </body>
     </html>
   );
