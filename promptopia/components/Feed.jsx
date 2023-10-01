@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 
 import PromptCard from "./PromptCard";
 
-const PromptCardList = ({ data, handleTagClick }) => {
+const PromptCardList = ({ data, handleTagClick }) => { //converts the array list into styled prompt cards
   return (
     <div className='mt-16 prompt_layout'>
       {data.map((post) => (
@@ -28,18 +28,18 @@ const Feed = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await fetch("/api/prompt");
+      const response = await fetch("/api/prompt"); // retrieves all prompts from the database
       const data = await response.json();
   
-      setAllPosts(data);
+      setAllPosts(data); // will be used in PromptCardList for all posts
     };
-    
+
     fetchPosts();
-  }, []);
+  }, []); // will be automatically run once
 
   const filterPrompts = (searchtext) => {
     const regex = new RegExp(searchtext, "i"); // 'i' flag for case-insensitive search
-    return allPosts.filter(
+    return allPosts.filter( //filters list that matches either the username, tag, prompt or even a few letters in prompt
       (item) =>
         regex.test(item.creator.username) ||
         regex.test(item.tag) ||
@@ -47,7 +47,7 @@ const Feed = () => {
     );
   };
 
-  const handleSearchChange = (e) => {
+  const handleSearchChange = (e) => { // searches prompts that starts with the typed in text in search engine
     clearTimeout(searchTimeout);
     setSearchText(e.target.value);
 
@@ -60,7 +60,7 @@ const Feed = () => {
     );
   };
 
-  const handleTagClick = (tagName) => {
+  const handleTagClick = (tagName) => { // searches prompts that starts with the clicked (#) tag text
     setSearchText(tagName);
 
     const searchResult = filterPrompts(tagName);
@@ -74,7 +74,7 @@ const Feed = () => {
           type='text'
           placeholder='Search for a tag or a username'
           value={searchText}
-          onChange={handleSearchChange}
+          onChange={handleSearchChange} // whenever a letter has been typed on the engine, the handler will be called to filter prompts that matches the text
           required
           className='search_input peer'
         />
@@ -82,12 +82,12 @@ const Feed = () => {
 
       {/* All Prompts */}
       {searchText ? (
-        <PromptCardList
+        <PromptCardList // will be triggered if user typed in a text on the prompt/search engine, 
           data={searchedResults}
           handleTagClick={handleTagClick}
         />
       ) : (
-        <PromptCardList data={allPosts} handleTagClick={handleTagClick} />
+        <PromptCardList data={allPosts} handleTagClick={handleTagClick} /> // retrieve all posts from the data that was fetched when useeffect was automatically called after rendering the page
       )}
     </section>
   );
