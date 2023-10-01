@@ -14,7 +14,7 @@ const UserProfile = ({ params }) => {
   useEffect(() => {
     const fetchPosts = async () => {
       const response = await fetch(`/api/users/${params?.id}/posts`); // retrieves all prompts created by the user
-
+      const data = await response.json();
       setUserPosts(data);
     };
 
